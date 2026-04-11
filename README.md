@@ -7,7 +7,7 @@ File &amp; Folder Compressor by Python
 
 Win + R ==> wt 입력 후 엔터
 <br><br>
-`python archiver.py c "압축 대상" "결과"`
+`python archiver.py c "압축 대상 폴더/파일 경로" "압축 후 생설될 파일의 이름"`
 
 ---
 
@@ -15,7 +15,7 @@ Win + R ==> wt 입력 후 엔터
 
 Win + R ==> wt 입력 후 엔터
 <br><br>
-`python archiver.py d "압축 해제 대상"`
+`python archiver.py d "압축 해제 대상 파일의 경로"`
 
 # 예시 사진
 
