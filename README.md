@@ -19,4 +19,7 @@ Win + R ==> wt 입력 후 엔터
 
 # 예시 사진
 
+<!--
 <img width="1115" height="628" alt="image" src="https://github.com/user-attachments/assets/5b9219d8-ea1f-4856-af8f-de113da569b6" />
+-->
+<img width="1115" height="628" alt="image" src="IMG_6180.png" />
