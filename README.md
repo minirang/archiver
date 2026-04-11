@@ -3,7 +3,7 @@ Python File &amp; Folder Compressor
 
 ---
 
-## 압축법
+# 압축법
 
 Win + R ==> wt 입력 후 엔터
 <br>
@@ -11,7 +11,7 @@ Win + R ==> wt 입력 후 엔터
 
 ---
 
-## 압축 해제법
+# 압축 해제법
 
 Win + R ==> wt 입력 후 엔터
 <br>
