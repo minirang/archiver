@@ -32,3 +32,5 @@ Win + R ==> wt 입력 후 엔터
 # 예시 사진
 
 <img width="1115" height="628" alt="image" src="img/compress.png" />
+<br>
+<img width="1115" height="628" alt="image" src="img/decompress.png" />
