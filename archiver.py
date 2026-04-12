@@ -76,6 +76,7 @@ def compress(source, output, remove_origin=False):
         comp_size = os.path.getsize(output)
         ratio = (1 - (comp_size / total_size)) * 100 if total_size > 0 else 0
         print(f"\nDone: {output} (Compressed: {ratio:.1f}%)")
+        print(f"Archive Path: {os.path.abspath(output)}")
 
         if remove_origin:
             if os.path.isdir(source):
