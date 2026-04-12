@@ -15,7 +15,7 @@ Win + R ==> wt 입력 후 엔터
 
 Win + R ==> wt 입력 후 엔터
 <br><br>
-`python archiver.py -d "압축 해제 대상 파일 이름.pyacr"`
+`python archiver.py -d "압축 해제 대상 파일 이름.pyarc"`
 
 ---
 
