@@ -122,7 +122,7 @@ if __name__ == "__main__":
         sys.exit()
 
     src = paths[0]
-    out = paths[1] if len(paths) > 1 else "archive"
+    out = paths[1] if len(paths) > 1 else os.path.basename(os.path.normpath(src))
 
     if "-c" in opts:
         compress(src, out, "-r" in opts)
