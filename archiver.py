@@ -102,7 +102,10 @@ def decompress(archive, remove_origin=False):
                 for i, member in enumerate(members):
                     tar.extract(member, filter="data")
                     show_progress(i + 1, len(members))
+
         print(f"\nExtraction Finished.")
+        print(f"Archive Path: {os.path.abspath(archive)}")
+        print(f"Extracted to: {os.path.abspath(os.getcwd())}")
 
         if remove_origin:
             os.remove(archive)
