@@ -8,6 +8,8 @@ Python-made File &amp; Folder Compressor
 Win + R ==> wt 입력 후 엔터
 <br><br>
 `python archiver.py -c "압축 대상 폴더" "압축 후 생설될 파일의 이름"`
+<br>
+실행 후 원하는 압축 단계 입력
 
 ---
 
