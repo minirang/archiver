@@ -39,4 +39,8 @@ Win + R ==> wt 입력 후 엔터
 
 # 주의사항
 
-`.pdf` `.hwpx` `.mp4` 등의 무겁거나 이미 압축된 파일,<br>압축이 잘 안되는 파일 등은 압축률이 낮음
+`.pdf` `hwpx` `mp4` 등의 무겁거나 이미 압축된 파일,<br>압축이 잘 안되는 파일, 규칙성이 없는 파일 등은 압축률이 낮음
+
+---
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
