@@ -3,8 +3,27 @@ import tarfile
 import lzma
 import sys
 import shutil
+import threading
+import time
 
 EXT = ".pyarc"
+CLR_P = "\033[95m"
+CLR_R = "\033[0m"
+CLR_R_RED = "\033[91m"  # Light Red
+
+if sys.platform == "win32":
+    os.system("")
+
+
+def spinner_task(stop_event):
+    spinners = ["|", "/", "-", "\\"]
+    idx = 0
+    while not stop_event.is_set():
+        sys.stdout.write(f"\r{CLR_P}{spinners[idx % 4]} Scanning target...{CLR_R}")
+        sys.stdout.flush()
+        idx += 1
+        time.sleep(0.1)
+    sys.stdout.write("\r" + " " * 30 + "\r")
 
 
 def get_size(path):
@@ -21,7 +40,7 @@ def show_progress(current, total):
     if total <= 0:
         return
     percent = (current / total) * 100
-    bar = "█" * int(percent // 2) + "=" * (50 - int(percent // 2))
+    bar = f"{CLR_P}█{CLR_R}" * int(percent // 2) + "=" * (50 - int(percent // 2))
     sys.stdout.write(f"\r|{bar}| {percent:.1f}%")
     sys.stdout.flush()
 
@@ -44,17 +63,30 @@ def compress(source, output, remove_origin=False):
     except ValueError:
         level = 6  # Default to level 6 if input is invalid
 
-    f_count = (
-        sum([len(files) for r, d, files in os.walk(source)])
-        if os.path.isdir(source)
-        else 1
+    print(
+        f"{CLR_R_RED}\nWARNING: Do not close this window until the process is complete.{CLR_R}"
     )
-    d_count = (
-        sum([len(d) for r, d, files in os.walk(source)]) if os.path.isdir(source) else 0
-    )
-    print(f"Target: {f_count} files, {d_count} folders")
+    stop_event = threading.Event()
+    spinner_thread = threading.Thread(target=spinner_task, args=(stop_event,))
+    spinner_thread.start()
+    try:
+        f_count = (
+            sum([len(files) for r, d, files in os.walk(source)])
+            if os.path.isdir(source)
+            else 1
+        )
+        d_count = (
+            sum([len(d) for r, d, files in os.walk(source)])
+            if os.path.isdir(source)
+            else 0
+        )
+        total_size = get_size(source)
 
-    total_size = get_size(source)
+    finally:
+        stop_event.set()
+        spinner_thread.join()
+
+    print(f"\nTarget: {f_count} files, {d_count} folders")
     current_read = 0
 
     print(f"Compressing: {source}")
@@ -75,7 +107,7 @@ def compress(source, output, remove_origin=False):
 
         comp_size = os.path.getsize(output)
         ratio = (1 - (comp_size / total_size)) * 100 if total_size > 0 else 0
-        print(f"\nDone: {output} (Compressed: {ratio:.1f}%)")
+        print(f"\nDone: {output} ({CLR_P}Compressed: {ratio:.1f}%{CLR_R})")
         print(f"Archive Path: {os.path.abspath(output)}")
 
         if remove_origin:
@@ -93,14 +125,20 @@ def compress(source, output, remove_origin=False):
 
 def decompress(archive, remove_origin=False):
     if not os.path.exists(archive):
+        print(f"{CLR_P}Error: File or folder '{archive}' not found.{CLR_R}")
         return
+
+    print(
+        f"{CLR_R_RED}WARNING: Do not close this window until the process is complete.{CLR_R}"
+    )
     print(f"Extracting: {archive}")
     try:
         with lzma.open(archive, "rb") as f_in:
             with tarfile.open(fileobj=f_in, mode="r") as tar:
                 members = tar.getmembers()
+
                 for i, member in enumerate(members):
-                    tar.extract(member, filter="data")
+                    tar.extract(member, path=".", filter="data")
                     show_progress(i + 1, len(members))
 
         print(f"\nExtraction Finished.")
@@ -125,7 +163,10 @@ if __name__ == "__main__":
         sys.exit()
 
     src = paths[0]
-    out = paths[1] if len(paths) > 1 else os.path.basename(os.path.normpath(src))
+    if len(paths) > 1:
+        out = paths[1]
+    else:
+        out = os.path.basename(os.path.normpath(src))
 
     if "-c" in opts:
         compress(src, out, "-r" in opts)
