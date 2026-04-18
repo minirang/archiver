@@ -7,8 +7,8 @@ import threading
 import time
 
 EXT = ".pyarc"
-CLR_P = "\033[95m"
-CLR_R = "\033[0m"
+CLR_P = "\033[95m"  # Purple
+CLR_R = "\033[0m"  # Default color
 CLR_R_RED = "\033[91m"  # Light Red
 
 if sys.platform == "win32":
@@ -46,12 +46,16 @@ def show_progress(current, total):
 
 
 def compress(source, output, remove_origin=False):
+    if not os.path.exists(source):
+        print(f"{CLR_R_RED}Error: File or folder '{source}' not found.{CLR_R}")
+        return
+
     if not output.endswith(EXT):
         output += EXT
 
     print("\n" + "=" * 50)
     print("Compression Level: 0 (Fast/Low) to 9 (Slow/High)")
-    print("WARNING: Levels 7-9 require significant memory.")
+    print(f"{CLR_R_RED}WARNING:{CLR_R} Levels 7-9 require significant memory.")
     print("Low-spec devices may crash due to high RAM usage.")
     print("=" * 50)
 
@@ -61,6 +65,7 @@ def compress(source, output, remove_origin=False):
         if not (0 <= level <= 9):
             level = 6
     except ValueError:
+        print(f"{CLR_R_RED}Invalid input. Using default level 6.{CLR_R}")
         level = 6  # Default to level 6 if input is invalid
 
     print(
@@ -107,7 +112,7 @@ def compress(source, output, remove_origin=False):
 
         comp_size = os.path.getsize(output)
         ratio = (1 - (comp_size / total_size)) * 100 if total_size > 0 else 0
-        print(f"\nDone: {output} ({CLR_P}Compressed: {ratio:.1f}%{CLR_R})")
+        print(f"\n\nDone: {output} ({CLR_P}Compressed: {ratio:.1f}%{CLR_R})")
         print(f"Archive Path: {os.path.abspath(output)}")
 
         if remove_origin:
@@ -115,7 +120,9 @@ def compress(source, output, remove_origin=False):
                 shutil.rmtree(source)
             else:
                 os.remove(source)
-            print(f"Original removed: {source}")
+            print(f"Original removed: {source}\n")
+
+        print()
 
     except Exception as e:
         print(f"\nError: {e}")
@@ -125,13 +132,13 @@ def compress(source, output, remove_origin=False):
 
 def decompress(archive, remove_origin=False):
     if not os.path.exists(archive):
-        print(f"{CLR_P}Error: File or folder '{archive}' not found.{CLR_R}")
+        print(f"{CLR_R_RED}Error: File or folder '{archive}' not found.{CLR_R}")
         return
 
     print(
-        f"{CLR_R_RED}WARNING: Do not close this window until the process is complete.{CLR_R}"
+        f"{CLR_R_RED}\nWARNING: Do not close this window until the process is complete.{CLR_R}"
     )
-    print(f"Extracting: {archive}")
+    print(f"\nExtracting: {archive}")
     try:
         with lzma.open(archive, "rb") as f_in:
             with tarfile.open(fileobj=f_in, mode="r") as tar:
@@ -141,16 +148,26 @@ def decompress(archive, remove_origin=False):
                     tar.extract(member, path=".", filter="data")
                     show_progress(i + 1, len(members))
 
-        print(f"\nExtraction Finished.")
+        print(f"\n\nExtraction Finished.")
         print(f"Archive Path: {os.path.abspath(archive)}")
         print(f"Extracted to: {os.path.abspath(os.getcwd())}")
 
         if remove_origin:
             os.remove(archive)
-            print(f"Archive removed: {archive}")
+            print(f"Archive removed: {archive}\n")
 
+        print()
+
+    except PermissionError:
+        print(
+            f"\n{CLR_R_RED}Error: Permission denied. If '{archive}' is a folder, you cannot decompress it.{CLR_R}"
+        )
+    except (lzma.LZMAError, tarfile.ReadError):
+        print(
+            f"\n{CLR_R_RED}Error: '{archive}' is not a valid {EXT} format or is corrupted.{CLR_R}"
+        )
     except Exception as e:
-        print(f"\nError: {e}")
+        print(f"\n{CLR_R_RED}Error: {e}{CLR_R}")
 
 
 if __name__ == "__main__":
