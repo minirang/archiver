@@ -162,10 +162,17 @@ def decompress(archive, remove_origin=False):
         print(
             f"\n{CLR_R_RED}Error: Permission denied. If '{archive}' is a folder, you cannot decompress it.{CLR_R}"
         )
+
+    except KeyboardInterrupt:
+        print("\nProcess interrupted by user.")
+        if os.path.exists(output):
+            os.remove(output) # Delete incomplete file
+
     except (lzma.LZMAError, tarfile.ReadError):
         print(
             f"\n{CLR_R_RED}Error: '{archive}' is not a valid {EXT} format or is corrupted.{CLR_R}"
         )
+
     except Exception as e:
         print(f"\n{CLR_R_RED}Error: {e}{CLR_R}")
 
