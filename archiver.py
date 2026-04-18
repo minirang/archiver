@@ -189,12 +189,16 @@ if __name__ == "__main__":
     src = paths[0]
     if len(paths) > 1:
         out = paths[1]
+
     else:
         out = os.path.basename(os.path.normpath(src))
 
+
     if "-c" in opts:
         compress(src, out, "-r" in opts)
+
     elif "-d" in opts:
         decompress(src, "-r" in opts)
+
     else:
         print("Invalid option. Use -c to compress or -d to decompress.")
