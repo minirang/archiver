@@ -164,9 +164,7 @@ def decompress(archive, remove_origin=False):
         )
 
     except KeyboardInterrupt:
-        print("\nProcess interrupted by user.")
-        if os.path.exists(output):
-            os.remove(output) # Delete incomplete file
+        print(f"\n{CLR_R_RED}Extraction interrupted by user.{CLR_R}")
 
     except (lzma.LZMAError, tarfile.ReadError):
         print(
@@ -192,7 +190,6 @@ if __name__ == "__main__":
 
     else:
         out = os.path.basename(os.path.normpath(src))
-
 
     if "-c" in opts:
         compress(src, out, "-r" in opts)
