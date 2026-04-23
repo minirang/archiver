@@ -48,4 +48,4 @@ python archiver.py -d "압축 해제 대상 파일 이름.pyarc"
 ---
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![JavaScript](https://img.shields.io/badge/language-Python-yellow)
+![Python](https://img.shields.io/badge/language-Python-yellow)
