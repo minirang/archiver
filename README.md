@@ -18,7 +18,7 @@ python archiver.py -c "압축 대상 폴더" "압축 후 생설될 파일의 이
 # 압축 해제법
 
 Win + R ==> wt 입력 후 엔터
-<br><br>
+<br>
 ```cmd
 python archiver.py -d "압축 해제 대상 파일 이름.pyarc"
 ```
