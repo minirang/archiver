@@ -1,5 +1,5 @@
 # archiver
-Python-made File &amp; Folder Compressor
+파이썬으로 만든 파일 &amp; 폴더 압축 프로그램
 
 ---
 
